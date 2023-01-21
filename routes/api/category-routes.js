@@ -24,7 +24,7 @@ router.get("/", (req, res) => {
       }
       res.json(data);
     })
-    .catcj((err) => {
+    .catch((err) => {
       console.log(err);
       res.status(500).json(err);
     });
@@ -34,7 +34,7 @@ router.get("/:id", (req, res) => {
   // find one category by its `id` value, including its associated products
   Category.findOne({
     where: {
-      category_id: req.params.category_id,
+      category_id: req.params.id,
     },
     include: {
       model: Product,
@@ -70,7 +70,7 @@ router.put("/:id", (req, res) => {
   // update a category by its `id` value
   Category.update(req.body, {
     where: {
-      category_id: req.params.category_id,
+      category_id: req.params.id,
     },
   })
     .then((data) => {
@@ -90,7 +90,7 @@ router.delete("/:id", (req, res) => {
   // delete a category by its `id` value
   Category.delete({
     where: {
-      category_id: req.params.category_id,
+      category_id: req.params.id,
     },
   })
     .then((data) => {
@@ -102,7 +102,7 @@ router.delete("/:id", (req, res) => {
       }
       res.json(data);
     })
-    .catcj((err) => {
+    .catch((err) => {
       console.log(err);
       res.status(500).json(err);
     });
