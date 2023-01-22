@@ -30,9 +30,9 @@ router.get("/:id", (req, res) => {
   // find a single product by its `id` including its associated Category and Tag data
   Product.findOne({
     where: {
-      product_id: req.params.id,
+      id: req.params.id,
     },
-    attributes: ["product_id", "product_name", "price", "stock"],
+    attributes: ["id", "product_name", "price", "stock"],
     include: [
       {
         model: Category,
@@ -137,7 +137,7 @@ router.delete("/:id", (req, res) => {
   // delete one product by its `id` value
   Product.delete({
     where: {
-      product_id: req.params.id,
+      id: req.params.id,
     },
   })
     .then((data) => {
