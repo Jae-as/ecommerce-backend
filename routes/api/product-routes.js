@@ -9,7 +9,7 @@ router.get("/", (req, res) => {
     include: [
       {
         model: Category,
-        attributes: ["category_name"],
+        attributes: ["id", "category_name"],
       },
       {
         model: Tag,
@@ -70,22 +70,25 @@ router.post("/", (req, res) => {
     product_name: req.body.product_name,
     price: req.body.price,
     stock: req.body.stock,
+    category_id: req.body.category_id,
     tagIds: [req.body.tag_id],
   })
     .then((data) => {
       // if there's product tags, we need to create pairings to bulk create in the ProductTag model
-      if (req.body.tagIds.length > 0) {
-        let tagsArray = [];
-        for (let i = 0; i < tagIds.length; i++) {
-        tagsArray.push({
-          value: tagIds[i].tag_id
-        })
-        ProductTag.bulkCreate(tagsArray)
-        }
-        return res.json(data);
+      if (req.body.tag_id.length > 0) {
+        const prodTagsArray = req.body.tagIds.map((tag_id) => {
+          return {
+            product_id: product.id,
+            tag_id: tag_id,
+          };
+        });
+        return ProductTag.bulkCreate(prodTagsArray)
+        res.json(data);
       }
       // if no product tags, just respond
-      else res.json(data);
+      else {
+        res.json(data);
+      }
     })
     .catch((err) => {
       console.log(err);
