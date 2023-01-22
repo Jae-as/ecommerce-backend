@@ -106,11 +106,11 @@ router.put("/:id", (req, res) => {
       id: req.params.id,
     },
   })
-    .then((data) => {
+    // .then((data) => {
       // find all associated tags from ProductTag
-      return ProductTag.findAll({ where: { id: req.params.id } });
-    })
+    // })
     .then((productTags) => {
+   ProductTag.findAll({ where: { id: req.params.id } });
       // get list of current tag_ids
       const productTagIds = productTags.map(({ tag_id }) => tag_id);
       // create filtered list of new tag_ids
@@ -124,12 +124,15 @@ router.put("/:id", (req, res) => {
         });
       // figure out which ones to remove
       const productTagsToRemove = productTags
-        .filter(({ tag_id }) => !req.body.tagIds.includes(tag_id))
+        .filter(({ tag_id }) => req.body.tagIds.includes(tag_id))
         .map(({ id }) => id);
+
+        console.log(newProductTags);
+        console.log(productTagsToRemove);
 
       // run both actions
       return Promise.all([
-        ProductTag.destroy({ where: { id: productTagsToRemove } }),
+        ProductTag.destroy({where: {id:productTagsToRemove} }),
         ProductTag.bulkCreate(newProductTags),
       ]);
     })
