@@ -82,8 +82,10 @@ router.post("/", (req, res) => {
             tag_id: tag_id,
           };
         });
-        return ProductTag.bulkCreate(prodTagsArray)
-        res.json(data);
+        return Promise.All([
+          ProductTag.bulkCreate(prodTagsArray),
+          res.json(data),
+        ]);
       }
       // if no product tags, just respond
       else {
