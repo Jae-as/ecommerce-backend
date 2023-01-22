@@ -82,7 +82,7 @@ router.post("/", (req, res) => {
             tag_id: tag_id,
           };
         });
-        return Promise.All([
+        return Promise.all([
           ProductTag.bulkCreate(prodTagsArray),
           res.json(data),
         ]);
@@ -108,7 +108,7 @@ router.put("/:id", (req, res) => {
   })
     .then((data) => {
       // find all associated tags from ProductTag
-      return ProductTag.findAll({ where: { product_id: req.params.id } });
+      return ProductTag.findAll({ where: { id: req.params.id } });
     })
     .then((productTags) => {
       // get list of current tag_ids
