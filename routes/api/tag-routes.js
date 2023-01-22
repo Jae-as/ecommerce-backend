@@ -11,11 +11,17 @@ router.get("/", (req, res) => {
       attributes: ["product_name", "price", "stock", "category_id"],
     },
   })
-    .then((data) => res.json(data))
-    .catch((err) => {
-      console.log(err);
-      res.status(500).json(err);
-    });
+  .then((data) => {
+    if (!data) {
+      res.status(404).json({ message: "No tags found!" });
+      return;
+    }
+    res.json(data);
+  })
+  .catch((err) => {
+    console.log(err);
+    res.status(500).json(err);
+  });
 });
 
 router.get("/:id", (req, res) => {
@@ -26,14 +32,14 @@ router.get("/:id", (req, res) => {
     },
     include: {
       model: Product,
-      attributes: ["product_name", "price", "stock", "category_id"],
+      attributes: ["id","product_name", "price", "stock", "category_id"],
     },
-  })
-    .then((data) => res.json(data))
-    .catch((err) => {
-      console.log(err);
-      res.status(500).json(err);
-    });
+  }).then((data) => {
+    if (!data) {
+      res.status(404).json({ message: "No tags found with this id." });
+    }
+    res.json(data);
+  });
 });
 
 router.post("/", (req, res) => {
@@ -55,19 +61,17 @@ router.put("/:id", (req, res) => {
       id: req.params.id,
     },
   })
-    .then((data) => {
-      if (data) {
-        res
-          .status(404)
-          .json({ message: "Not ag data with that id has been found" });
-        return;
-      }
-      res.json(data);
-    })
-    .catch((err) => {
-      console.log(err);
-      res.status(500).json(err);
-    });
+  .then((data) => {
+    if (!data) {
+      res.status(404).json({ message: "No tag was found with this id" });
+      return;
+    }
+    res.json(data);
+  })
+  .catch((err) => {
+    console.log(err);
+    res.status(500).json(err);
+  });
 });
 
 router.delete("/:id", (req, res) => {
@@ -77,17 +81,19 @@ router.delete("/:id", (req, res) => {
       id: req.params.id,
     },
   })
-    .then((data) => {
-      if (!data) {
-        res.status(404).json({ message: "No tag with that id was found." });
-        return;
-      }
-      res.json(data);
-    })
-    .catch((err) => {
-      console.log(err);
-      res.status(500).json(err);
-    });
+  .then((data) => {
+    if (!data) {
+      res
+        .status(404)
+        .json({ message: "No tag has been found with that id." });
+      return;
+    }
+    res.json(data);
+  })
+  .catch((err) => {
+    console.log(err);
+    res.status(500).json(err);
+  });
 });
 
 module.exports = router;

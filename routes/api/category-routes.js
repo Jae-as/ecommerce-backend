@@ -85,7 +85,7 @@ router.delete("/:id", (req, res) => {
       if (!data) {
         res
           .status(404)
-          .json({ message: "No category has been dound with that id." });
+          .json({ message: "No category has been found with that id." });
         return;
       }
       res.json(data);
